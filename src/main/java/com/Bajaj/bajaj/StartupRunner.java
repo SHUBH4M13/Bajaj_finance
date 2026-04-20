@@ -22,9 +22,9 @@ public class StartupRunner implements CommandLineRunner {
             String generateUrl = "https://bfhldevapigw.healthrx.co.in/hiring/generateWebhook/JAVA";
 
             Map<String, String> requestBody = new HashMap<>();
-            requestBody.put("name", "John Doe");
-            requestBody.put("regNo", "REG12347");
-            requestBody.put("email", "john@example.com");
+            requestBody.put("name", "Shubham Karna");
+            requestBody.put("regNo", "ADT23SOCB1107");
+            requestBody.put("email", "skarna230@gmail.com");
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
