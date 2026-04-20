@@ -57,7 +57,6 @@ public class StartupRunner implements CommandLineRunner {
             HttpHeaders submitHeaders = new HttpHeaders();
             submitHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-            // ✅ FIX: NO "Bearer"
             submitHeaders.set("Authorization", accessToken);
 
             Map<String, String> finalBody = new HashMap<>();
