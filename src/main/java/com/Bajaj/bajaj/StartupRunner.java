@@ -42,25 +42,23 @@ public class StartupRunner implements CommandLineRunner {
             String webhookUrl = "https://bfhldevapigw.healthrx.co.in/hiring/testWebhook/JAVA";
             String accessToken = responseMap.get("accessToken");
 
-            System.out.println(accessToken);
+            System.out.println("TOKEN: " + accessToken);
 
-            String sqlQuery = "SELECT \n" +
-                    "    p.AMOUNT AS SALARY,\n" +
-                    "    CONCAT(e.FIRST_NAME, ' ', e.LAST_NAME) AS NAME,\n" +
-                    "    TIMESTAMPDIFF(YEAR, e.DOB, CURDATE()) AS AGE,\n" +
-                    "    d.DEPARTMENT_NAME\n" +
-                    "FROM PAYMENTS p\n" +
-                    "JOIN EMPLOYEE e ON p.EMP_ID = e.EMP_ID\n" +
-                    "JOIN DEPARTMENT d ON e.DEPARTMENT = d.DEPARTMENT_ID\n" +
-                    "WHERE DAY(p.PAYMENT_TIME) <> 1\n" +
-                    "AND p.AMOUNT = (\n" +
-                    "    SELECT MAX(AMOUNT)\n" +
-                    "    FROM PAYMENTS\n" +
-                    "    WHERE DAY(PAYMENT_TIME) <> 1\n" +
-                    ");";
+            String sqlQuery = "SELECT p.AMOUNT AS SALARY, " +
+                    "CONCAT(e.FIRST_NAME, ' ', e.LAST_NAME) AS NAME, " +
+                    "TIMESTAMPDIFF(YEAR, e.DOB, CURDATE()) AS AGE, " +
+                    "d.DEPARTMENT_NAME " +
+                    "FROM PAYMENTS p " +
+                    "JOIN EMPLOYEE e ON p.EMP_ID = e.EMP_ID " +
+                    "JOIN DEPARTMENT d ON e.DEPARTMENT = d.DEPARTMENT_ID " +
+                    "WHERE DAY(p.PAYMENT_TIME) <> 1 " +
+                    "AND p.AMOUNT = (SELECT MAX(AMOUNT) FROM PAYMENTS WHERE DAY(PAYMENT_TIME) <> 1);";
+
             HttpHeaders submitHeaders = new HttpHeaders();
             submitHeaders.setContentType(MediaType.APPLICATION_JSON);
-            submitHeaders.set("Authorization", "Bearer " + accessToken);
+
+            // ✅ FIX: NO "Bearer"
+            submitHeaders.set("Authorization", accessToken);
 
             Map<String, String> finalBody = new HashMap<>();
             finalBody.put("finalQuery", sqlQuery);
